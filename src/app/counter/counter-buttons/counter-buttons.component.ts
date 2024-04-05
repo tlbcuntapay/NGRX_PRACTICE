@@ -13,6 +13,7 @@ export class CounterButtonsComponent {
 
   onIncrement() {
     this.store.dispatch(increment());
+    console.log(this.store);
   }
 
   onDecrement() {

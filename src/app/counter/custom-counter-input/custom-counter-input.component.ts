@@ -19,6 +19,7 @@ export class CustomCounterInputComponent implements OnInit {
 
   ngOnInit(): void {
     this.developerName$ = this.store.select(getDeveloperName);
+    
   }
 
   onAdd() {
