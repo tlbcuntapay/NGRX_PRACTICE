@@ -2,37 +2,40 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
-import { loginStart } from '../state/auth.actions';
+import { signupStart } from '../state/auth.actions';
 import { setLoadingSpinner } from 'src/app/store/shared/shared.actions';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss'],
 })
-export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
+export class SignupComponent implements OnInit {
+  signupForm!: FormGroup;
 
   constructor(private store: Store<AppState>) {}
 
-  ngOnInit(): void {
-    this.loginForm = new FormGroup({
+  ngOnInit() {
+    this.signupForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
   }
 
-  onLogin() {
-    const email = this.loginForm.value.email;
-    const password = this.loginForm.value.password;
+  onSignupSubmit() {
+    if (!this.signupForm.valid) {
+      return;
+    }
+    const email = this.signupForm.value.email;
+    const password = this.signupForm.value.password;
 
-    this.store.dispatch(setLoadingSpinner({ showloading: true }));
-    this.store.dispatch(loginStart({ email, password }));
+    this.store.dispatch(setLoadingSpinner({showloading: true}));
+    this.store.dispatch(signupStart({email, password}));
   }
 
   showEmailErrors(): string {
     let errorMessage = '';
-    const emailForm = this.loginForm.get('email');
+    const emailForm = this.signupForm.get('email');
     if (emailForm?.touched && !emailForm?.valid) {
       if (emailForm?.errors?.['required']) {
         errorMessage = 'Email is required';
@@ -47,7 +50,7 @@ export class LoginComponent implements OnInit {
 
   showPasswordErrors(): string {
     let errorMessage = '';
-    const passwordForm = this.loginForm.get('password');
+    const passwordForm = this.signupForm.get('password');
     if (passwordForm?.touched && !passwordForm?.valid) {
       if (passwordForm?.errors?.['required']) {
         errorMessage = 'Password is required';

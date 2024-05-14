@@ -24,7 +24,6 @@ export class CustomCounterInputComponent implements OnInit {
 
   onAdd() {
     this.store.dispatch(customIncrement({count: +this.value}));
-    console.log(this.value);
   }
 
   onChangeDevName() {
