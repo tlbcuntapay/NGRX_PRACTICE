@@ -6,16 +6,36 @@ import {
   addPostSuccess,
   deletePost,
   deletePostSuccess,
+  getWalks,
+  getWalksFailure,
+  getWalksSuccess,
   loadPosts,
   loadPostsSuccess,
   updatePost,
   updatePostSuccess,
 } from './posts.action';
-import { map, mergeMap } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
+import { Walk } from 'src/app/models/walks.model';
 
 @Injectable()
 export class PostEffects {
   constructor(private actions$: Actions, private postsService: PostsService) {}
+
+  loadWalks$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(getWalks),
+      mergeMap((action) => {
+        return this.postsService.getWalks().pipe(
+          map((walks: Walk[]) => {
+            return getWalksSuccess({ walks });
+          }),
+          catchError((error) => {
+            return of(getWalksFailure()); // Handle errors
+          })
+        );
+      })
+    );
+  });
 
   loadPosts$ = createEffect(() => {
     return this.actions$.pipe(
@@ -57,19 +77,16 @@ export class PostEffects {
     );
   });
 
-  deletePost$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(deletePost),
-        mergeMap((action) => {
-          return this.postsService.deletePost(action.id).pipe(
-            map((data) => {
-              return deletePostSuccess({ id: action.id})
-
-            })
-          );
-        })
-      );
-    }
-  );
+  deletePost$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(deletePost),
+      mergeMap((action) => {
+        return this.postsService.deletePost(action.id).pipe(
+          map((data) => {
+            return deletePostSuccess({ id: action.id });
+          })
+        );
+      })
+    );
+  });
 }

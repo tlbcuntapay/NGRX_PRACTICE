@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Post } from 'src/app/models/posts.model';
 import { AppState } from 'src/app/store/app.state';
 import { getPosts } from '../state/posts.selector';
-import { deletePost, loadPosts } from '../state/posts.action';
+import { deletePost, getWalks, loadPosts } from '../state/posts.action';
 
 @Component({
   selector: 'app-posts-list',
@@ -24,5 +24,9 @@ export class PostsListComponent implements OnInit {
     if (confirm("Are you sure you want to delete this post")) {
       this.store.dispatch(deletePost({ id }));
     }
+  }
+
+  loadWalks() {
+    this.store.dispatch(getWalks());
   }
 }

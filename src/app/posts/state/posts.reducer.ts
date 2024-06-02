@@ -4,6 +4,7 @@ import {
   addPostSuccess,
   deletePost,
   deletePostSuccess,
+  getWalksSuccess,
   loadPostsSuccess,
   updatePost,
   updatePostSuccess,
@@ -43,7 +44,13 @@ const _postReducer = createReducer(
       ...state,
       posts: action.posts,
     };
-  })
+  }),
+  on(getWalksSuccess, (state, action) => {
+    return {
+      ...state,
+      walks: action.walks,
+    };
+  }),
 );
 
 export function postsReducer(state: any, action: any) {
